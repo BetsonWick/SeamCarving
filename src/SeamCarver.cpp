@@ -1,1 +1,35 @@
 #include "SeamCarver.h"
+
+SeamCarver::SeamCarver(Image image)
+    : m_image(std::move(image))
+{}
+
+const Image& SeamCarver::GetImage() const
+{
+    return m_image;
+}
+
+size_t SeamCarver::GetImageWidth() const
+{
+    return 0;
+}
+
+size_t SeamCarver::GetImageHeight() const
+{
+    return 0;
+}
+
+size_t SeamCarver::GetPixelEnergy(size_t rowId, size_t columnId) const
+{
+    return 0;
+}
+
+SeamCarver::Seam SeamCarver::FindHorizontalSeam() const
+{
+    return Seam();
+}
+
+SeamCarver::Seam SeamCarver::FindVerticalSeam() const
+{
+    return Seam();
+}
