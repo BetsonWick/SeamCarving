@@ -15,6 +15,5 @@ struct Image
 
     Image(std::vector<std::vector<Pixel>> table);
 
-private:
     std::vector<std::vector<Pixel>> m_table;
 };

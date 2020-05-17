@@ -1,6 +1,6 @@
 #include "Image.h"
 
-Image::Image(std::vector<std::vector<Pixel>> table)
+Image::Image(std::vector<std::vector<Image::Pixel>> table)
     : m_table(std::move(table))
 {}
 

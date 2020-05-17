@@ -19,7 +19,7 @@ size_t SeamCarver::GetImageHeight() const
     return 0;
 }
 
-size_t SeamCarver::GetPixelEnergy(size_t rowId, size_t columnId) const
+size_t SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const
 {
     return 0;
 }
@@ -32,4 +32,14 @@ SeamCarver::Seam SeamCarver::FindHorizontalSeam() const
 SeamCarver::Seam SeamCarver::FindVerticalSeam() const
 {
     return Seam();
+}
+
+void SeamCarver::RemoveHorizontalSeam(const Seam& seam)
+{
+
+}
+
+void SeamCarver::RemoveVerticalSeam(const Seam& seam)
+{
+
 }
