@@ -46,11 +46,15 @@
 
 ### Вычисления
 Для вычисления энергии пикселя используется следующая формула:
-$$
-energy = \sqrt{\Delta_{x}^{2}(x, y) + \Delta_{y}^{2}(x, y)}
-$$
+
+<img src="https://render.githubusercontent.com/render/math?math=\sqrt{\Delta_{x}^{2}(x, y) %2B \Delta_{y}^{2}(x, y)}">
+
+где
+
+<img src="https://render.githubusercontent.com/render/math?math=\Delta_{x}^{2}(x, y) = R_{x}^{2}(x,y) %2B G_{x}^{2}(x,y) %2B B_{x}^{2}(x,y)">
 
 
+<img src="https://render.githubusercontent.com/render/math?math=R_{x}^{2}(x,y)"> это разность между компонентами пикселей *(x + 1, y)* и *(x - 1, y)*, отвечающими за красный цвет. Аналогично определяются <img src="https://render.githubusercontent.com/render/math?math=G_{x}^{2}(x,y)"> и <img src="https://render.githubusercontent.com/render/math?math=B_{x}^{2}(x,y)"> отвечающие за разность зеленых и голубых компонент соответственно.
 
 
 
