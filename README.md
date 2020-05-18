@@ -21,7 +21,7 @@
 Вам потребуется создать структуру данных, которая будет изменять размер изображения (WxH), использую алгоритм *seam carving*.
 
 ### Обозначения
-Пиксель *(x,y)* в исходном изображении соответствует ячейке в таблице с колокой *x* и строкой *y*. Таким образом, пиксель *(0,0)* находится в левом верхний углу таблицы, а пиксель *(W-1, H-1)* в правом нижнем углу таблицы.
+Пиксель *(x, y)* в исходном изображении соответствует ячейке в таблице с колокой *x* и строкой *y*. Таким образом, пиксель *(0, 0)* находится в левом верхний углу таблицы, а пиксель *(W-1, H-1)* в правом нижнем углу таблицы.
 
 Пример таблицы 3x4:
 
@@ -45,16 +45,49 @@
 3. После того, как последовательность с минимальной суммарной энергией найдена, пиксели, входящие в нее, нужно будет удалить из изображения.
 
 ### Вычисления
+#### Энергия пикселя
 Для вычисления энергии пикселя используется следующая формула:
 
-<img src="https://render.githubusercontent.com/render/math?math=\sqrt{\Delta_{x}^{2}(x, y) %2B \Delta_{y}^{2}(x, y)}">
-
-где
-
-<img src="https://render.githubusercontent.com/render/math?math=\Delta_{x}^{2}(x, y) = R_{x}^{2}(x,y) %2B G_{x}^{2}(x,y) %2B B_{x}^{2}(x,y)">
-
+<img src="https://render.githubusercontent.com/render/math?math=e=\sqrt{\Delta_{x}^{2}(x, y) %2B \Delta_{y}^{2}(x, y)}">, где <img src="https://render.githubusercontent.com/render/math?math=\Delta_{x}^{2}(x, y) = R_{x}^{2}(x,y) %2B G_{x}^{2}(x,y) %2B B_{x}^{2}(x,y)">
 
 <img src="https://render.githubusercontent.com/render/math?math=R_{x}^{2}(x,y)"> это разность между компонентами пикселей *(x + 1, y)* и *(x - 1, y)*, отвечающими за красный цвет. Аналогично определяются <img src="https://render.githubusercontent.com/render/math?math=G_{x}^{2}(x,y)"> и <img src="https://render.githubusercontent.com/render/math?math=B_{x}^{2}(x,y)"> отвечающие за разность зеленых и голубых компонент соответственно.
 
+Для вычисления <img src="https://render.githubusercontent.com/render/math?math=\Delta_{y}^{2}(x, y)"> необходимо рассматривать пиксели *(x, y + 1)* и *(x, y - 1)*.
 
+Чтобы посчитать энергию пикселя *(0, y)*, который находится на границе изображения, нужно будет использовать пиксели *(1, y)* и *(W - 1, y)*.
 
+Рассмотрим то, как вычислять энергию пикселей на примере изображения *3x4*:
+
+![](data/text/energycalc.png)
+
+Рассмотрим пиксель *(1, 2)*, который находится не на границе. Чтобы посчитать <img src="https://render.githubusercontent.com/render/math?math=\Delta_{x}"> нам потребуется рассмотреть пиксели *(0, 2)* и *(2, 2)*.
+
+<img src="https://render.githubusercontent.com/render/math?math=R_{x}(1,2) = 255 %2D 255 = 0 ">
+
+<img src="https://render.githubusercontent.com/render/math?math=G_{x}(1,2) = 205 %2D 203 = 2 ">
+
+<img src="https://render.githubusercontent.com/render/math?math=B_{x}(1,2) = 255 %2D 51 = 204 ">
+
+И получаем, что:
+
+<img src="https://render.githubusercontent.com/render/math?math=\Delta^{2}_{x}(1, 2) = 2^2 %2B 204^2 = 41620">
+
+Чтобы посчитать <img src="https://render.githubusercontent.com/render/math?math=\Delta_{y}"> нам потребуется рассмотреть пиксели *(1, 1)* и *(1, 3)*.
+
+<img src="https://render.githubusercontent.com/render/math?math=R_{y}(1,2) = 255 %2D 255 = 0 ">
+
+<img src="https://render.githubusercontent.com/render/math?math=G_{y}(1,2) = 205 %2D 153 = 102 ">
+
+<img src="https://render.githubusercontent.com/render/math?math=B_{y}(1,2) = 153 %2D 153 = 0 ">
+
+И
+
+<img src="https://render.githubusercontent.com/render/math?math=\Delta^{2}_{y}(1, 2) = 102^2 = 10404">
+
+#### Пример вертикального шва
+
+![](data/text/seam_v.png)
+
+#### Пример горизонтального шва
+
+![](data/text/seam_h.png)
