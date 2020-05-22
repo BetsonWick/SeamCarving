@@ -8,9 +8,9 @@ height, width, dimension = image.shape
 
 with open(out_filename, 'w') as csv_file:
     image_writer = csv.writer(csv_file, delimiter=' ')
-    image_writer.writerow([height, width])
-    for i in range(height):
-        for j in range(width):
-            r, g, b = image[i, j, :]
+    image_writer.writerow([width, height])
+    for i in range(width):
+        for j in range(height):
+            r, g, b = image[j, i, :]
             image_writer.writerow([r, g, b])
 
