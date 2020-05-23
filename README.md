@@ -172,3 +172,14 @@ private:
    ```
 
 Изображение `tower_updated.jpeg` — результат работы алгоритма *seam carving*.
+
+Для запуска python скриптов потребуются 3-й python и пакеты:
+* imageio
+* numpy
+* pandas
+* argparse
+
+Для установки нужных пакетов используйте `pip`:
+```
+pip install required-package-name
+```
