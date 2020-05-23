@@ -33,13 +33,13 @@ public:
 
     /**
      * Returns sequence of pixel row indexes (y)
-     * (x indexes are [0:H-1])
+     * (x indexes are [0:W-1])
      */
     Seam FindHorizontalSeam() const;
 
     /**
      * Returns sequence of pixel column indexes (x)
-     * (y indexes are [0:W-1])
+     * (y indexes are [0:H-1])
      */
     Seam FindVerticalSeam() const;
 
