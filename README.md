@@ -91,3 +91,84 @@
 #### Пример горизонтального шва
 
 ![](data/text/seam_h.png)
+
+### Интерфейс для реализации
+
+Вам потребуется реализовать интерфейс `SeamCarver`:
+
+```cpp
+class SeamCarver
+{
+    using Seam = std::vector<size_t>;
+
+public:
+    SeamCarver(Image image);
+
+    /**
+     * Returns current image
+     */
+    const Image& GetImage() const;
+
+    /**
+     * Gets current image width
+     */
+    size_t GetImageWidth() const;
+
+    /**
+     * Gets current image height
+     */
+    size_t GetImageHeight() const;
+
+    /**
+     * Returns pixel energy
+     * @param columnId column index (x)
+     * @param rowId row index (y)
+     */
+    double GetPixelEnergy(size_t columnId, size_t rowId) const;
+
+    /**
+     * Returns sequence of pixel row indexes (y)
+     * (x indexes are [0:W-1])
+     */
+    Seam FindHorizontalSeam() const;
+
+    /**
+     * Returns sequence of pixel column indexes (x)
+     * (y indexes are [0:H-1])
+     */
+    Seam FindVerticalSeam() const;
+
+    /**
+     * Removes sequence of pixels from the image
+     */
+    void RemoveHorizontalSeam(const Seam& seam);
+
+    /**
+     * Removes sequence of pixes from the image
+     */
+    void RemoveVerticalSeam(const Seam& seam);
+
+private:
+    Image m_image;
+};
+```
+
+### Проверка задания
+
+При проверке задания кроме unit-тестов можно воспользоваться python-скриптами из папки `scripts`.
+
+Пример использования:
+1. Генерация `csv` файла по изображению
+   ```
+   python scripts/img_to_csv.py data/tower.jpeg data/tower.csv
+   ```
+2. Запуск алгоритма *seam-carving*
+   ```
+   ./seam-carving data/tower.csv data/tower_updated.csv    
+   ```
+3. Генерация изображения по `csv` файлу
+   ```
+   python scripts/csv_to_img.py data/tower_updated.csv data/tower_updated.jpeg 
+   ```
+
+Изображение `tower_updated.jpeg` — результат работы алгоритма *seam carving*.
