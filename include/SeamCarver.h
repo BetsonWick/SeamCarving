@@ -29,17 +29,17 @@ public:
      * @param columnId column index (x)
      * @param rowId row index (y)
      */
-    size_t GetPixelEnergy(size_t columnId, size_t rowId) const;
+    double GetPixelEnergy(size_t columnId, size_t rowId) const;
 
     /**
      * Returns sequence of pixel row indexes (y)
-     * (x indexes are [0:W-1])
+     * (x indexes are [0:H-1])
      */
     Seam FindHorizontalSeam() const;
 
     /**
      * Returns sequence of pixel column indexes (x)
-     * (y indexes are [0:H-1])
+     * (y indexes are [0:W-1])
      */
     Seam FindVerticalSeam() const;
 

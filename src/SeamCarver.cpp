@@ -19,9 +19,9 @@ size_t SeamCarver::GetImageHeight() const
     return 0;
 }
 
-size_t SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const
+double SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const
 {
-    return 0;
+    return 0.0;
 }
 
 SeamCarver::Seam SeamCarver::FindHorizontalSeam() const
