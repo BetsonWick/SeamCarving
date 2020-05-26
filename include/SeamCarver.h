@@ -2,6 +2,8 @@
 
 #include "Image.h"
 
+using namespace std;
+
 class SeamCarver
 {
     using Seam = std::vector<size_t>;
@@ -55,4 +57,5 @@ public:
 
 private:
     Image m_image;
+    vector<vector<double>> energy_matrix;
 };
