@@ -3,9 +3,11 @@
 
 using namespace std;
 
+using vec = vector<double>;
+
 SeamCarver::SeamCarver(Image image)
         : m_image(std::move(image)) {
-    energy_matrix = vector<vector<double>>(GetImageWidth(), vector<double>(GetImageHeight(), 0));
+    energy_matrix = vector<vec>(GetImageWidth(), vec(GetImageHeight(), 0));
     for (size_t x = 0; x < GetImageWidth(); x++) {
         for (size_t y = 0; y < GetImageHeight(); y++) {
             energy_matrix[x][y] = GetPixelEnergy(x, y);
@@ -40,64 +42,56 @@ double SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const {
     return sqrt(delta_x + delta_y);
 }
 
-SeamCarver::Seam SeamCarver::FindHorizontalSeam() const {
-    Seam path;
-    vector<vector<double>> table(GetImageWidth(), vector<double>(GetImageHeight(), 0));
-    for (size_t y = 0; y < GetImageHeight(); y++) {
-        table[0][y] = energy_matrix[0][y];
+vector<size_t> getPath(vector<vector<double>> matrix) {
+    size_t width = matrix.size();
+    size_t height = matrix.empty() ? 0 : matrix.front().size();
+    vector<vec> table(width, vec(height, 0));
+    for (size_t x = 0; x < width; x++) {
+        table[x][0] = matrix[x][0];
     }
-    for (size_t i = 0; i < GetImageHeight(); i++) {
-        for (size_t j = 1; j < GetImageWidth(); j++) {
-            table[j][i] = table[j - 1][i];
-            if (i > 0 && table[j - 1][i - 1] < table[j][i]) table[j][i] = table[j - 1][i - 1];
-            if (i < GetImageHeight() - 1 && table[j - 1][i + 1] < table[j][i]) table[j][i] = table[j - 1][i + 1];
-            table[j][i] += energy_matrix[j][i];
-        }
-    }
-    path.resize(GetImageWidth(), 0);
-    size_t last = GetImageWidth() - 1;
-    for (size_t i = 1; i < GetImageHeight(); i++) {
-        if (table[last][i] < table[last][path[last]]) {
-            path[last] = i;
-        }
-    }
-    for (int i = last - 1; i >= 0; i--) {
-        size_t prev = path[i + 1];
-        path[i] = prev;
-        if (prev > 0 && table[i][path[i]] > table[i][prev - 1]) path[i] = prev - 1;
-        if (prev < GetImageHeight() - 1 && table[i][path[i]] > table[i][prev + 1]) path[i] = prev + 1;
-    }
-    return path;
-}
-
-SeamCarver::Seam SeamCarver::FindVerticalSeam() const {
-    Seam path;
-    vector<vector<double>> table(GetImageWidth(), vector<double>(GetImageHeight(), 0));
-    for (size_t x = 0; x < GetImageWidth(); x++) {
-        table[x][0] = energy_matrix[x][0];
-    }
-    for (size_t i = 1; i < GetImageHeight(); i++) {
-        for (size_t j = 0; j < GetImageWidth(); j++) {
+    for (size_t i = 1; i < height; i++) {
+        for (size_t j = 0; j < width; j++) {
             table[j][i] = table[j][i - 1];
             if (j > 0 && table[j - 1][i - 1] < table[j][i]) table[j][i] = table[j - 1][i - 1];
-            if (j < GetImageWidth() - 1 && table[j + 1][i - 1] < table[j][i]) table[j][i] = table[j + 1][i - 1];
-            table[j][i] += energy_matrix[j][i];
+            if (j < width - 1 && table[j + 1][i - 1] < table[j][i]) table[j][i] = table[j + 1][i - 1];
+            table[j][i] += matrix[j][i];
         }
     }
-    path.resize(GetImageHeight(), 0);
-    size_t last = GetImageHeight() - 1;
-    for (size_t i = 1; i < GetImageWidth(); i++) {
+    vector<size_t> path(height, 0);
+    size_t last = height - 1;
+    for (size_t i = 1; i < width; i++) {
         if (table[i][last] < table[path[last]][last]) {
             path[last] = i;
         }
     }
-    for (int i = last - 1; i >= 0; i--) {
+    for (int i = static_cast<int>(last) - 1; i >= 0; i--) {
         size_t prev = path[i + 1];
         path[i] = prev;
         if (prev > 0 && table[path[i]][i] > table[prev - 1][i]) path[i] = prev - 1;
-        if (prev < GetImageWidth() - 1 && table[path[i]][i] > table[prev + 1][i]) path[i] = prev + 1;
+        if (prev < width - 1 && table[path[i]][i] > table[prev + 1][i]) path[i] = prev + 1;
     }
     return path;
+}
+
+vector<vec> getRotatedMatrix(vector<vec> matrix) {
+    size_t width = matrix.size();
+    size_t height = matrix.empty() ? 0 : matrix.front().size();
+    vector<vec> res(height, vec(width, 0));
+    for (size_t x = 0; x < width; x++) {
+        for (size_t y = 0; y < height; y++) {
+            res[y][x] = matrix[x][y];
+        }
+    }
+    return res;
+}
+
+SeamCarver::Seam SeamCarver::FindHorizontalSeam() const {
+    return getPath(getRotatedMatrix(energy_matrix));
+
+}
+
+SeamCarver::Seam SeamCarver::FindVerticalSeam() const {
+    return getPath(energy_matrix);
 }
 
 void SeamCarver::RemoveVerticalSeam(const Seam &seam) {
@@ -114,3 +108,4 @@ void SeamCarver::RemoveHorizontalSeam(const SeamCarver::Seam &seam) {
         m_image.m_table[y].erase(m_image.m_table[y].begin() + seam[y]);
     }
 }
+
