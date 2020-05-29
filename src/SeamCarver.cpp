@@ -8,11 +8,7 @@ using vec = vector<double>;
 SeamCarver::SeamCarver(Image image)
         : m_image(std::move(image)) {
     energy_matrix = vector<vec>(GetImageWidth(), vec(GetImageHeight(), 0));
-    for (size_t x = 0; x < GetImageWidth(); x++) {
-        for (size_t y = 0; y < GetImageHeight(); y++) {
-            energy_matrix[x][y] = GetPixelEnergy(x, y);
-        }
-    }
+    fillEnergy();
 }
 
 const Image &SeamCarver::GetImage() const {
@@ -101,11 +97,21 @@ void SeamCarver::RemoveVerticalSeam(const Seam &seam) {
         }
     }
     m_image.m_table.erase(m_image.m_table.end());
+    fillEnergy();
 }
 
 void SeamCarver::RemoveHorizontalSeam(const SeamCarver::Seam &seam) {
     for (size_t y = 0; y < GetImageWidth(); y++) {
         m_image.m_table[y].erase(m_image.m_table[y].begin() + seam[y]);
+    }
+    fillEnergy();
+}
+
+void SeamCarver::fillEnergy() {
+    for (size_t x = 0; x < GetImageWidth(); x++) {
+        for (size_t y = 0; y < GetImageHeight(); y++) {
+            energy_matrix[x][y] = GetPixelEnergy(x, y);
+        }
     }
 }
 

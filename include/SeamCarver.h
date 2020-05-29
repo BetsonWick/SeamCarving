@@ -45,6 +45,7 @@ public:
      */
     Seam FindVerticalSeam() const;
 
+    void fillEnergy();
     /**
      * Removes sequence of pixels from the image
      */
