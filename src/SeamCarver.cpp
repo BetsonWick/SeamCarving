@@ -38,7 +38,7 @@ double SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const {
     return sqrt(delta_x + delta_y);
 }
 
-vector<size_t> getPath(vector<vector<double>> matrix) {
+vector<size_t> getPath(const vector<vec> &matrix) {
     size_t width = matrix.size();
     size_t height = matrix.empty() ? 0 : matrix.front().size();
     vector<vec> table(width, vec(height, 0));
@@ -48,8 +48,12 @@ vector<size_t> getPath(vector<vector<double>> matrix) {
     for (size_t i = 1; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
             table[j][i] = table[j][i - 1];
-            if (j > 0 && table[j - 1][i - 1] < table[j][i]) table[j][i] = table[j - 1][i - 1];
-            if (j < width - 1 && table[j + 1][i - 1] < table[j][i]) table[j][i] = table[j + 1][i - 1];
+            if (j > 0 && table[j - 1][i - 1] < table[j][i]) {
+                table[j][i] = table[j - 1][i - 1];
+            }
+            if (j < width - 1 && table[j + 1][i - 1] < table[j][i]) {
+                table[j][i] = table[j + 1][i - 1];
+            };
             table[j][i] += matrix[j][i];
         }
     }
@@ -63,13 +67,17 @@ vector<size_t> getPath(vector<vector<double>> matrix) {
     for (int i = static_cast<int>(last) - 1; i >= 0; i--) {
         size_t prev = path[i + 1];
         path[i] = prev;
-        if (prev > 0 && table[path[i]][i] > table[prev - 1][i]) path[i] = prev - 1;
-        if (prev < width - 1 && table[path[i]][i] > table[prev + 1][i]) path[i] = prev + 1;
+        if (prev > 0 && table[path[i]][i] > table[prev - 1][i]) {
+            path[i] = prev - 1;
+        }
+        if (prev < width - 1 && table[path[i]][i] > table[prev + 1][i]) {
+            path[i] = prev + 1;
+        }
     }
     return path;
 }
 
-vector<vec> getRotatedMatrix(vector<vec> matrix) {
+vector<vec> getRotatedMatrix(const vector<vec> &matrix) {
     size_t width = matrix.size();
     size_t height = matrix.empty() ? 0 : matrix.front().size();
     vector<vec> res(height, vec(width, 0));
