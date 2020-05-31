@@ -91,12 +91,12 @@ SeamCarver::Seam SeamCarver::FindVerticalSeam() const {
 }
 
 void SeamCarver::RemoveVerticalSeam(const Seam &seam) {
-    for (size_t i = 0; i < GetImageHeight(); i++) {
-        for (size_t j = seam[i]; j < GetImageWidth() - 1; j++) {
-            m_image.m_table[j][i] = m_image.m_table[j + 1][i];
+    for (size_t i = 0; i < seam.size(); i++) {
+        for (size_t j = seam[i] + 1; j < GetImageWidth(); j++) {
+            m_image.m_table[j - 1][i] = m_image.m_table[j][i];
         }
     }
-    m_image.m_table.erase(m_image.m_table.end());
+    m_image.m_table.pop_back();
     FillEnergy();
 }
 
@@ -108,6 +108,7 @@ void SeamCarver::RemoveHorizontalSeam(const SeamCarver::Seam &seam) {
 }
 
 void SeamCarver::FillEnergy() {
+    m_energy_matrix.resize(GetImageWidth(), vec(GetImageHeight(), 0));
     for (size_t x = 0; x < GetImageWidth(); x++) {
         for (size_t y = 0; y < GetImageHeight(); y++) {
             m_energy_matrix[x][y] = GetPixelEnergy(x, y);
