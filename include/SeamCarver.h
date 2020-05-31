@@ -2,8 +2,6 @@
 
 #include "Image.h"
 
-using namespace std;
-
 class SeamCarver
 {
     using Seam = std::vector<size_t>;
@@ -45,7 +43,7 @@ public:
      */
     Seam FindVerticalSeam() const;
 
-    void fillEnergy();
+    void FillEnergy();
     /**
      * Removes sequence of pixels from the image
      */
@@ -58,5 +56,5 @@ public:
 
 private:
     Image m_image;
-    vector<vector<double>> energy_matrix;
+    std::vector<std::vector<double>> m_energy_matrix;
 };

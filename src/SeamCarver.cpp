@@ -7,8 +7,8 @@ using vec = vector<double>;
 
 SeamCarver::SeamCarver(Image image)
         : m_image(std::move(image)) {
-    energy_matrix = vector<vec>(GetImageWidth(), vec(GetImageHeight(), 0));
-    fillEnergy();
+    m_energy_matrix = vector<vec>(GetImageWidth(), vec(GetImageHeight(), 0));
+    FillEnergy();
 }
 
 const Image &SeamCarver::GetImage() const {
@@ -82,12 +82,12 @@ vector<vec> getRotatedMatrix(vector<vec> matrix) {
 }
 
 SeamCarver::Seam SeamCarver::FindHorizontalSeam() const {
-    return getPath(getRotatedMatrix(energy_matrix));
+    return getPath(getRotatedMatrix(m_energy_matrix));
 
 }
 
 SeamCarver::Seam SeamCarver::FindVerticalSeam() const {
-    return getPath(energy_matrix);
+    return getPath(m_energy_matrix);
 }
 
 void SeamCarver::RemoveVerticalSeam(const Seam &seam) {
@@ -97,20 +97,20 @@ void SeamCarver::RemoveVerticalSeam(const Seam &seam) {
         }
     }
     m_image.m_table.erase(m_image.m_table.end());
-    fillEnergy();
+    FillEnergy();
 }
 
 void SeamCarver::RemoveHorizontalSeam(const SeamCarver::Seam &seam) {
     for (size_t y = 0; y < GetImageWidth(); y++) {
         m_image.m_table[y].erase(m_image.m_table[y].begin() + seam[y]);
     }
-    fillEnergy();
+    FillEnergy();
 }
 
-void SeamCarver::fillEnergy() {
+void SeamCarver::FillEnergy() {
     for (size_t x = 0; x < GetImageWidth(); x++) {
         for (size_t y = 0; y < GetImageHeight(); y++) {
-            energy_matrix[x][y] = GetPixelEnergy(x, y);
+            m_energy_matrix[x][y] = GetPixelEnergy(x, y);
         }
     }
 }
