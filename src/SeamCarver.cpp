@@ -20,7 +20,7 @@ size_t SeamCarver::GetImageWidth() const {
 }
 
 size_t SeamCarver::GetImageHeight() const {
-    return m_image.m_table.empty() ? 0 : m_image.m_table.front().size();
+    return m_image.m_table.empty() ? 0 : m_image.m_table[0].size();
 }
 
 double SeamCarver::GetPixelEnergy(size_t columnId, size_t rowId) const {
